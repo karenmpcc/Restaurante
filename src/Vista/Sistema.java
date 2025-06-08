@@ -1153,6 +1153,7 @@ public class Sistema extends javax.swing.JFrame {
         if (p.getNombre() != null) {
             textDescripcionVenta.setText(p.getDescripcion());
             txtPrecioVenta.setText(String.valueOf(p.getPrecio()));
+            txtIdProductoVenta.setText(String.valueOf(p.getId_producto()));
             txtCantidadVenta.requestFocus();  // Para que el usuario escriba cuántos quiere
         } else {
             JOptionPane.showMessageDialog(null, "Producto no encontrado");
@@ -1389,13 +1390,14 @@ public class Sistema extends javax.swing.JFrame {
             String cod = txtCodigoVenta.getText();
             Productos prod = proDao.BuscarPorCodigo(cod);
             if (prod.getNombre() != null) {
-                textDescripcionVenta.setText(prod.getNombre());   
-                txtPrecioVenta.setText(String.valueOf(prod.getPrecio()));   
+                textDescripcionVenta.setText(prod.getNombre());
+                txtPrecioVenta.setText(String.valueOf(prod.getPrecio()));
+                txtIdProductoVenta.setText(String.valueOf(prod.getId_producto()));
                 txtCantidadVenta.requestFocus();
             } else {
                 JOptionPane.showMessageDialog(null, "Producto no encontrado");
-                LimpiarVenta();   
-                txtCodigoVenta.requestFocus();   
+                LimpiarVenta();
+                txtCodigoVenta.requestFocus();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Ingrese el código del producto");
@@ -1423,7 +1425,7 @@ public class Sistema extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
         if (!"".equals(txtCantidadVenta.getText())) {
-            int id = Integer.parseInt(txtCodigoVenta.getText());
+            String codigo = txtCodigoVenta.getText();
             String descripcion = textDescripcionVenta.getText();
             int cant = Integer.parseInt(txtCantidadVenta.getText());
             double precio = Double.parseDouble(txtPrecioVenta.getText());
@@ -1442,7 +1444,7 @@ public class Sistema extends javax.swing.JFrame {
 
             // Crear la fila
             Object[] fila = new Object[5];
-            fila[0] = id;
+            fila[0] = codigo;
             fila[1] = descripcion;
             fila[2] = cant;
             fila[3] = precio;
@@ -1666,14 +1668,16 @@ public class Sistema extends javax.swing.JFrame {
     int id = Vdao.IdVenta(); // Obtener el ID de la venta insertada
 
     for (int i = 0; i < TableVenta.getRowCount(); i++) {
-        int cod_pro = Integer.parseInt(TableVenta.getValueAt(i, 0).toString());
+        String codigo = TableVenta.getValueAt(i, 0).toString();
+        Productos prod = proDao.BuscarPorCodigo(codigo);
+        int idProducto = prod.getId_producto();
         int cant = Integer.parseInt(TableVenta.getValueAt(i, 2).toString());
         double precio = Double.parseDouble(TableVenta.getValueAt(i, 3).toString());
 
-        Dv.setId_producto(cod_pro);  // Usa tu método real: setId_producto o equivalente
+        Dv.setId_producto(idProducto);
         Dv.setCantidad(cant);
         Dv.setPrecio(precio);
-        Dv.setId_venta(id);          // Usa tu método real: setId_venta o equivalente
+        Dv.setId_venta(id);
 
         Vdao.RegistrarDetalle(Dv);
     }
