@@ -26,8 +26,8 @@ public class Login extends javax.swing.JFrame {
      public void validar(){
         String correo = txtCorreo.getText();
         String password = String.valueOf(txtPass.getPassword());
-        if (!"".equals(correo) || !"".equals(password)) {
-            
+        if (!"".equals(correo) && !"".equals(password)) {
+
             lg = login.log(correo, password);
             if (lg.getCorreo()!= null && lg.getPassword() != null) {
                 Sistema sis = new Sistema();
@@ -36,6 +36,8 @@ public class Login extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(null, "Correo o la Contraseña incorrecta");
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe ingresar correo y contraseña");
         }
     }
 
